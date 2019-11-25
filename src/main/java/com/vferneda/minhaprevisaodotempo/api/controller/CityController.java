@@ -19,11 +19,11 @@ public class CityController {
     private final CityService service;
 
     @GetMapping
-    public ResponseEntity search(@RequestParam(value = "name", required = false) String name,
-                                 @RequestParam(value = "country", required = false) String country,
+    public ResponseEntity search(@RequestParam("name") String name,
+                                 @RequestParam("country") String country,
                                  @RequestParam(value = "lon", required = false) Double lon,
                                  @RequestParam(value = "lat", required = false) Double lat,
-                                 @RequestParam("id") Long id) {
+                                 @RequestParam(value = "id", required = false) Long id) {
         final City cityFilter = new City();
         cityFilter.setId(id);
         cityFilter.setName(name);
