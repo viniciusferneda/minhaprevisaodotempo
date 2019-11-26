@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -12,12 +14,13 @@ import lombok.NoArgsConstructor;
 public class OpenWeatherListDTO {
 
     private Integer dt;
+    private String dt_txt;
     private OpenWeatherListMainDTO main;
-    private OpenWeatherListWeatherDTO weather;
+    private List<OpenWeatherListWeatherDTO> weather;
     private OpenWeatherListCloudsDTO clouds;
     private OpenWeatherListWindDTO wind;
-    private OpenWeatherListSnowDTO snow;
+    private OpenWeatherListVolumeSnowRainDTO rain;
+    private OpenWeatherListVolumeSnowRainDTO snow;
     private OpenWeatherListSysDTO sys;
-    private String dt_txt;
 
 }

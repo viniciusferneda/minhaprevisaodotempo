@@ -7,7 +7,14 @@ import com.vferneda.minhaprevisaodotempo.service.CityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -39,6 +46,11 @@ public class CityController {
         return service.getById(id)//
                 .map(city -> new ResponseEntity(converter(city), HttpStatus.OK))//
                 .orElseGet(() -> new ResponseEntity(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("{id}/detalhar")
+    public ResponseEntity detalharById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(service.detalharClimaDaCidade(id));
     }
 
     @PostMapping

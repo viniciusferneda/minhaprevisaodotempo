@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -14,5 +16,7 @@ public class OpenWeatherDTO {
     private Integer cod;
     private String message;
     private Integer cnt;
+    private List<OpenWeatherListDTO> list;
+    private OpenWeatherCityDTO city;
 
 }
