@@ -1,4 +1,4 @@
-package com.vferneda.minhaprevisaodotempo.service;
+package com.vferneda.minhaprevisaodotempo.repository;
 
 import com.vferneda.minhaprevisaodotempo.model.entity.City;
 import com.vferneda.minhaprevisaodotempo.repository.CityRepository;
@@ -18,7 +18,7 @@ import java.util.Optional;
 @ActiveProfiles("test")
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class CityServiceTest {
+public class CityRepositoryTest {
 
     @Autowired
     private CityRepository repository;

@@ -26,8 +26,8 @@ public class CityController {
     private final CityService service;
 
     @GetMapping
-    public ResponseEntity search(@RequestParam("name") String name,
-                                 @RequestParam("country") String country,
+    public ResponseEntity search(@RequestParam(value = "name", required = false) String name,
+                                 @RequestParam(value = "country", required = false) String country,
                                  @RequestParam(value = "lon", required = false) Double lon,
                                  @RequestParam(value = "lat", required = false) Double lat,
                                  @RequestParam(value = "id", required = false) Long id) {
@@ -64,10 +64,11 @@ public class CityController {
         }
     }
 
-    @DeleteMapping
-    public ResponseEntity delete(@RequestBody CityDTO dto) {
+    @DeleteMapping("{id}")
+    public ResponseEntity delete(@PathVariable Long id) {
         try {
-            final City city = converter(dto);
+            final City city = new City();
+            city.setId(id);
             service.delete(city);
             return new ResponseEntity(HttpStatus.OK);
         } catch (ValidationException exc) {

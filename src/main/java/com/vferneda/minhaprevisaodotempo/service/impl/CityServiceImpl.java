@@ -87,6 +87,9 @@ public class CityServiceImpl implements CityService {
         if (city.getCountry() == null || city.getCountry().trim().equals("")) {
             throw new ValidationException("Informe um País válido.");
         }
+        if (this.repository.findByNameAndCountry(city.getName(), city.getCountry()).isPresent()) {
+            throw new ValidationException("Cidade já existente, informe outra cidade!");
+        }
     }
 
     @Override
