@@ -15,9 +15,6 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -49,21 +46,20 @@ public class CityServiceImpl implements CityService {
     }
 
     private void loadCity(City city) {
-        try {
-            final JsonReader reader = new JsonReader(new FileReader(new File(getClass().getClassLoader().getResource("city.list.json").getFile())));
-            final List<CityListDTO> lCities = Arrays.asList(new Gson().fromJson(reader, CityListDTO[].class));
-            final Optional<CityListDTO> cityOpt = lCities.stream().filter(cityDto -> cityDto.getName().equals(city.getName()) && cityDto.getCountry().equals(city.getCountry())).findFirst();
-            final CityListDTO cityListDTO = cityOpt.isPresent() ? cityOpt.get() : null;
-            if (cityListDTO == null) {
-                throw new ValidationException("Cidade não encontrada, informe uma cidade válida!");
-            }
-            city.setId(cityListDTO.getId());
-            city.setLat(cityListDTO.getCoord().getLat());
-            city.setLon(cityListDTO.getCoord().getLon());
-        } catch (FileNotFoundException fnfe) {
-            fnfe.printStackTrace();
-            throw new ValidationException("Ocorreu um erro inesperado!");
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        if (classLoader == null) {
+            classLoader = this.getClass().getClassLoader();
         }
+        final JsonReader reader = new JsonReader(new InputStreamReader(classLoader.getResourceAsStream("com.vferneda.minhaprevisaodotempo.service.impl/city.list.json")));
+        final List<CityListDTO> lCities = Arrays.asList(new Gson().fromJson(reader, CityListDTO[].class));
+        final Optional<CityListDTO> cityOpt = lCities.stream().filter(cityDto -> cityDto.getName().equals(city.getName()) && cityDto.getCountry().equals(city.getCountry())).findFirst();
+        final CityListDTO cityListDTO = cityOpt.isPresent() ? cityOpt.get() : null;
+        if (cityListDTO == null) {
+            throw new ValidationException("Cidade não encontrada, informe uma cidade válida!");
+        }
+        city.setId(cityListDTO.getId());
+        city.setLat(cityListDTO.getCoord().getLat());
+        city.setLon(cityListDTO.getCoord().getLon());
     }
 
     @Override
