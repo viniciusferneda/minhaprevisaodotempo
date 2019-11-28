@@ -16,8 +16,6 @@
 
 	<properties>
 		<java.version>1.8</java.version>
-		<liquibase-maven-plugin.version>3.5.0</liquibase-maven-plugin.version>
-		<liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
 	</properties>
 
 	<dependencies>
