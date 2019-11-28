@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OpenWeatherListDTO {
 
-    private Integer dt;
+    private Long dt;
     private String dt_txt;
     private OpenWeatherListMainDTO main;
     private List<OpenWeatherListWeatherDTO> weather;

@@ -14,12 +14,10 @@ public class PrevisaoDoTempoDTO {
     private String dia;
     private String tempo;
     private String icon;
-    private Integer temperatura;
-    private Integer temperaturaMinima;
-    private Integer temperaturaMaxima;
-    private Integer umidade;
-    private Integer vento;
-    private Double volumeChuva;
-    private Double volumeNeve;
+    private String temperatura;
+    private String temperaturaMinima;
+    private String temperaturaMaxima;
+    private String umidade;
+    private String vento;
 
 }

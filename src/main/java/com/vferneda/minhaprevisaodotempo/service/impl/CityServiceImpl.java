@@ -23,6 +23,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -50,7 +52,8 @@ public class CityServiceImpl implements CityService {
         try {
             final JsonReader reader = new JsonReader(new FileReader(new File(getClass().getClassLoader().getResource("city.list.json").getFile())));
             final List<CityListDTO> lCities = Arrays.asList(new Gson().fromJson(reader, CityListDTO[].class));
-            final CityListDTO cityListDTO = lCities.stream().filter(cityDto -> cityDto.getName().equals(city.getName()) && cityDto.getCountry().equals(city.getCountry())).findFirst().orElseGet(null);
+            final Optional<CityListDTO> cityOpt = lCities.stream().filter(cityDto -> cityDto.getName().equals(city.getName()) && cityDto.getCountry().equals(city.getCountry())).findFirst();
+            final CityListDTO cityListDTO = cityOpt.isPresent() ? cityOpt.get() : null;
             if (cityListDTO == null) {
                 throw new ValidationException("Cidade não encontrada, informe uma cidade válida!");
             }
@@ -112,16 +115,14 @@ public class CityServiceImpl implements CityService {
             if (openWeatherDTO != null && openWeatherDTO.getList() != null && !openWeatherDTO.getList().isEmpty()) {
                 for (OpenWeatherListDTO dto : openWeatherDTO.getList()) {
                     final PrevisaoDoTempoDTO previsaoDoTempoDTO = new PrevisaoDoTempoDTO();
-                    previsaoDoTempoDTO.setDia(dto.getDt_txt());
+                    previsaoDoTempoDTO.setDia(formatLocalDateTime(toLocalDateTime(dto.getDt_txt())));
                     previsaoDoTempoDTO.setTempo(dto.getWeather().get(0).getDescription());
                     previsaoDoTempoDTO.setIcon(dto.getWeather().get(0).getIcon());
-                    previsaoDoTempoDTO.setTemperatura(dto.getMain().getTemp().intValue());
-                    previsaoDoTempoDTO.setTemperaturaMinima(dto.getMain().getTemp_min().intValue());
-                    previsaoDoTempoDTO.setTemperaturaMaxima(dto.getMain().getTemp_max().intValue());
-                    previsaoDoTempoDTO.setUmidade(dto.getMain().getHumidity());
-                    previsaoDoTempoDTO.setVento(dto.getWind().getSpeed().intValue());
-                    previsaoDoTempoDTO.setVolumeChuva(dto.getRain() == null || dto.getRain().getLast3hours() == null ? 0 : dto.getRain().getLast3hours());
-                    previsaoDoTempoDTO.setVolumeNeve(dto.getSnow() == null || dto.getSnow().getLast3hours() == null ? 0 : dto.getSnow().getLast3hours());
+                    previsaoDoTempoDTO.setTemperatura(dto.getMain().getTemp().intValue() + "º");
+                    previsaoDoTempoDTO.setTemperaturaMinima(dto.getMain().getTemp_min().intValue() + "º");
+                    previsaoDoTempoDTO.setTemperaturaMaxima(dto.getMain().getTemp_max().intValue() + "º");
+                    previsaoDoTempoDTO.setUmidade(dto.getMain().getHumidity() + "%");
+                    previsaoDoTempoDTO.setVento(dto.getWind().getSpeed().intValue() + " km/h");
                     lPrevisaoDoTempoDTO.add(previsaoDoTempoDTO);
                 }
             }
@@ -131,6 +132,16 @@ public class CityServiceImpl implements CityService {
             throw new ValidationException("Ocorreu um erro inesperado!");
         }
         return lPrevisaoDoTempoDTO;
+    }
+
+    private static LocalDateTime toLocalDateTime(String dtTxt) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return LocalDateTime.parse(dtTxt, formatter);
+    }
+
+    private static String formatLocalDateTime(LocalDateTime localDateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        return localDateTime.format(formatter);
     }
 
 }
