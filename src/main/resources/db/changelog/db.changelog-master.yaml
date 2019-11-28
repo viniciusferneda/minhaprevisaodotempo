@@ -1,0 +1,9 @@
+url: jdbc:postgresql://localhost:5432/minhaprevisaodotempo
+username: postgres
+password: admin
+driver: org.postgresql.Driver
+
+databaseChangeLog:
+  - include:
+      file: changes/001-CreateTableCity.xml
+      relativeToChangelogFile: true
